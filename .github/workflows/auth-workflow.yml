@@ -24,7 +24,7 @@ jobs:
         
     - name: Copy pyproject.toml
       run: |
-        cp auth/pyproject.toml
+        cp auth/pyproject.toml .
 
     - name: Pre-commit
       run: |
