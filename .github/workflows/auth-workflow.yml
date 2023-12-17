@@ -17,14 +17,15 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    - name: Change to auth package directory
-      run: cd auth
-    
     - name: Set up Python 3.10
       uses: actions/setup-python@v3
       with:
         python-version: "3.10"
         
+    - name: Copy pyproject.toml
+      run: |
+        cp auth/pyproject.toml
+
     - name: Pre-commit
       run: |
         python -m pip install --upgrade pip
@@ -46,4 +47,5 @@ jobs:
         
     - name: Test with pytest
       run: |
+        cd auth
         pytest
