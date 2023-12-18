@@ -1,16 +1,13 @@
-from passlib.context import CryptContext
+from abc import ABC, abstractmethod
 
 class Service:
     pass
 
-DEFAULT_CRYPTOGRAPHY_CONTEXT = CryptContext(schemes=["bcrypt"], deprecated="auto")
+class Cryptography(ABC, Service):
+    @abstractmethod
+    def hash(self, password : str) -> str:
+        pass
 
-class Cryptography(Service):
-    def __init__(self, context : CryptContext = DEFAULT_CRYPTOGRAPHY_CONTEXT):
-        self.context = context
-
-    def hash(self, password: str) -> str:
-        return self.context.hash(password)
-    
-    def verify(self, password: str, hashed: str) -> bool:
-        return self.context.verify(password, hashed)
+    @abstractmethod
+    def verify(self, password : str, hashed : str) -> bool:
+        pass
