@@ -1,24 +1,21 @@
+from auth.domain.repository import Users as Repository
+from auth.adapters.schemas import Credentials, Profile
+from sqlalchemy.orm import Session
 from datetime import date
-from abc import ABC, abstractmethod
-from typing import Generic, TypeVar
 
-from auth.domain.models import User, Profile, Credentials, SecretStr
-from auth.domain.services import Cryptography
-
-C, P = TypeVar('C'), TypeVar('P')
-class Users(ABC, Generic[C,P]):
-    def __init__(self, cryptography : Cryptography):
-        self.cryptography = cryptography
-
-    @abstractmethod
+class Users(Repository[Credentials, Profile]):
+    def __init__(self, session : Session):
+        self._session = session
+        
     def _create_credentials(self, username : str, email : str, password : str) -> int:
-        pass
-
-    @abstractmethod
+        credentials = Credentials(username=username, email=email, password=password)
+        self._session.add(credentials)
+        self._session.flush()
+        return credentials.id
+    
     def _create_profile(self, id : int, first_name : str, last_name : str, birthdate : date):
-        pass
+        profile = Profile(id=id, first_name=first_name, last_name=last_name, birthdate=birthdate)
+        self._session.add(profile)
+        self._session.flush()
 
-    def add_user(self, credentials : Credentials, profile : Profile) -> int:
-        id = self._create_credentials(credentials.username, credentials.email, credentials.password.get_secret_value())
-        self._create_profile(id, profile.first_name, profile.last_name, profile.birthdate)
-        return id
+    
