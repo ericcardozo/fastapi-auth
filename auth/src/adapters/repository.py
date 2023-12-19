@@ -1,10 +1,12 @@
-from auth.domain.repository import Users as Repository
-from auth.adapters.schemas import Credentials, Profile
+from src.domain.repository import Users as Repository
+from src.domain.services import Cryptography
+from src.adapters.schemas import Credentials, Profile
 from sqlalchemy.orm import Session
 from datetime import date
 
 class Users(Repository[Credentials, Profile]):
-    def __init__(self, session : Session):
+    def __init__(self, session : Session, criptography : Cryptography):
+        super().__init__(criptography)
         self._session = session
         
     def _create_credentials(self, username : str, email : str, password : str) -> int:

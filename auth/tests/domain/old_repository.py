@@ -1,6 +1,6 @@
 import pytest
 from datetime import date
-from auth.domain.models import User, Profile, Credentials
+from src.domain.models import User, Profile, Credentials
 
 @pytest.fixture
 def user():

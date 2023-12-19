@@ -1,7 +1,7 @@
 from datetime import date
-from auth.domain.models import User, Profile, Credentials
-from auth.domain.services import Cryptography
-from auth.domain.repository import Users
+from src.domain.models import User, Profile, Credentials
+from src.domain.services import Cryptography
+from src.domain.repository import Users
 from passlib.context import CryptContext
 
 class PasslibCryptography(Cryptography):

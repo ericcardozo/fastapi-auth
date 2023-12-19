@@ -2,7 +2,6 @@ from pydantic import BaseModel, SecretStr, EmailStr
 from datetime import date
 
 class Profile(BaseModel):
-    id : int
     first_name : str
     last_name : str
     birthdate : date
@@ -13,6 +12,7 @@ class Credentials(BaseModel):
     password : SecretStr
 
 class User:
-    def __init__(self, username : str, profile : Profile):
+    def __init__(self, id : int, username : str, profile : Profile):
+        self.id = id
         self.username = username
         self.profile = profile

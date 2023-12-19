@@ -2,8 +2,8 @@ from datetime import date
 from abc import ABC, abstractmethod
 from typing import Generic, TypeVar
 
-from auth.domain.models import User, Profile, Credentials, SecretStr
-from auth.domain.services import Cryptography
+from src.domain.models import User, Profile, Credentials, SecretStr
+from src.domain.services import Cryptography
 
 C, P = TypeVar('C'), TypeVar('P')
 class Users(ABC, Generic[C,P]):

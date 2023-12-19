@@ -1,9 +1,6 @@
 from abc import ABC, abstractmethod
 
-class Service:
-    pass
-
-class Cryptography(ABC, Service):
+class Cryptography(ABC):
     @abstractmethod
     def hash(self, password : str) -> str:
         pass

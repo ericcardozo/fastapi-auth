@@ -1,5 +1,5 @@
 import pytest
-from auth.domain.services import Cryptography
+from src.domain.services import Cryptography
 from passlib.context import CryptContext
 
 class PasslibCryptography(Cryptography):
