@@ -1,9 +1,9 @@
-from src.domain.repository import Users
+from src.domain.repository import Users as Repository
 from src.domain.services import Cryptography
 from abc import ABC, abstractmethod
 
 class Context(ABC):
-    users : Users
+    users : Repository
     cryptography : Cryptography
 
     def __exit__(self, *args):

@@ -17,8 +17,39 @@ class Users(ABC, Generic[C,P]):
     @abstractmethod
     def _create_profile(self, id : int, first_name : str, last_name : str, birthdate : date):
         raise NotImplementedError
-
+    
+    @abstractmethod
+    def _read_credentials(self, **kwargs) -> C:
+        raise NotImplementedError
+    
+    @abstractmethod
+    def _read_profile(self, **kwargs) -> P:
+        raise NotImplementedError
+    
+    @abstractmethod
+    def _delete_user(self, id : int):
+        raise NotImplementedError
+    
     def add_user(self, credentials : Credentials, profile : Profile) -> int:
         id = self._create_credentials(credentials.username, credentials.email, credentials.password.get_secret_value())
         self._create_profile(id, profile.first_name, profile.last_name, profile.birthdate)
         return id
+    
+    def get_user_by_username(self, username : str) -> User:
+        credentials = self._read_credentials(username=username)
+        profile = self._read_profile(id=credentials.id)
+        profile_model = Profile(
+            first_name = profile.first_name,
+            last_name = profile.last_name,
+            birthdate = profile.birthdate
+        )
+        user = User(id = credentials.id, username = credentials.username, profile = profile_model)
+        return user
+    
+    def remove_user_by_id(self, id : int):
+        self._delete_user(id=id)
+
+    def remove_user_by_username(self, username : str):
+        self._delete_user(username=username)
+    
+        

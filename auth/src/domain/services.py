@@ -8,3 +8,13 @@ class Cryptography(ABC):
     @abstractmethod
     def verify(self, password : str, hashed : str) -> bool:
         raise NotImplementedError
+    
+    
+class Tokenization(ABC):
+    @abstractmethod
+    def encode(self, data : dict) -> str:
+        raise NotImplementedError
+
+    @abstractmethod
+    def decode(self, token : str) -> dict:
+        raise NotImplementedError
