@@ -7,16 +7,16 @@ from src.domain.services import Cryptography
 
 C, P = TypeVar('C'), TypeVar('P')
 class Users(ABC, Generic[C,P]):
-    def __init__(self, cryptography : Cryptography):
-        self.cryptography = cryptography
+    def __init__(self):
+        pass
 
     @abstractmethod
-    def _create_credentials(self, username : str, email : str, password : str) -> int:
-        pass
+    def _create_credentials(self, username : str, email : str, password : str) -> int:    
+        raise NotImplementedError
 
     @abstractmethod
     def _create_profile(self, id : int, first_name : str, last_name : str, birthdate : date):
-        pass
+        raise NotImplementedError
 
     def add_user(self, credentials : Credentials, profile : Profile) -> int:
         id = self._create_credentials(credentials.username, credentials.email, credentials.password.get_secret_value())

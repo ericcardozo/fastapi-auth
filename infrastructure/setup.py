@@ -4,7 +4,10 @@ import psycopg2
 
 dotenv.load_dotenv()
 class Database:        
-    def __init__(self, host : str, port : str, username : str, password : str, database : str):
+    def __init__(self):
+        self.connection = None
+
+    def connect(self, host : str, port : str, username : str, password : str, database : str):
         try:
             self.connection = psycopg2.connect(
                 host = host,
@@ -47,7 +50,9 @@ class Database:
 
 
 if __name__ == "__main__":
-    test = Database(
+    test = Database()
+
+    test.connect(
         host = os.getenv("TEST_DATABASE_HOST"),
         port = os.getenv("TEST_DATABASE_PORT"),
         username = os.getenv("TEST_DATABASE_USERNAME"),
@@ -56,5 +61,4 @@ if __name__ == "__main__":
     )
 
     test.migrate()
-    test.drop()
     test.connection.close()

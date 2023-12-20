@@ -3,8 +3,8 @@ from abc import ABC, abstractmethod
 class Cryptography(ABC):
     @abstractmethod
     def hash(self, password : str) -> str:
-        pass
+        raise NotImplementedError
 
     @abstractmethod
     def verify(self, password : str, hashed : str) -> bool:
-        pass
+        raise NotImplementedError

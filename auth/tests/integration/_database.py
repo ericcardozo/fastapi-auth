@@ -1,3 +1,5 @@
+# Should be done when deploying the application.
+
 import os, dotenv
 import pytest
 from infrastructure.setup import Database
@@ -6,7 +8,8 @@ from datetime import date
 @pytest.fixture
 def database_fixture():
     dotenv.load_dotenv()
-    database = Database(
+    database = Database()
+    database.connect(
         host = os.getenv("TEST_DATABASE_HOST"),
         port = os.getenv("TEST_DATABASE_PORT"),
         username = os.getenv("TEST_DATABASE_USERNAME"),
@@ -59,11 +62,3 @@ def test_database(database_fixture : Database):
         cursor.close()
         database_fixture.drop()
         database_fixture.connection.close()
-
-
-
-    
-
-
-
-    

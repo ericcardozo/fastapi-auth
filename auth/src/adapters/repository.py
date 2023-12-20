@@ -1,12 +1,11 @@
 from src.domain.repository import Users as Repository
 from src.domain.services import Cryptography
 from src.adapters.schemas import Credentials, Profile
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, sessionmaker
 from datetime import date
 
 class Users(Repository[Credentials, Profile]):
-    def __init__(self, session : Session, criptography : Cryptography):
-        super().__init__(criptography)
+    def __init__(self, session : Session):
         self._session = session
         
     def _create_credentials(self, username : str, email : str, password : str) -> int:
@@ -19,5 +18,6 @@ class Users(Repository[Credentials, Profile]):
         profile = Profile(id=id, first_name=first_name, last_name=last_name, birthdate=birthdate)
         self._session.add(profile)
         self._session.flush()
+
 
     
