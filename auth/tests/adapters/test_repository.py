@@ -2,9 +2,10 @@ import os, dotenv
 import pytest
 from infrastructure.setup import Database
 
+dotenv.load_dotenv()
+
 @pytest.fixture
 def database_fixture():
-    dotenv.load_dotenv()
     database = Database(
         host = os.getenv("TEST_DATABASE_HOST"),
         port = os.getenv("TEST_DATABASE_PORT"),
@@ -12,10 +13,9 @@ def database_fixture():
         password = os.getenv("TEST_DATABASE_PASSWORD"),
         database = os.getenv("TEST_DATABASE_NAME")
     )
+    
     database.migrate()
     yield database
-    database.drop()
-    database.close()
 
 from sqlalchemy import create_engine, URL
 from sqlalchemy.orm import sessionmaker
@@ -44,7 +44,6 @@ class Cryptography(Service):
 
 @pytest.fixture
 def orm_engine_fixture():
-    dotenv.load_dotenv()
     engine = create_engine(url = URL.create(
         drivername=os.getenv("TEST_DATABASE_DRIVERNAME"),
         username=os.getenv("TEST_DATABASE_USERNAME"),
@@ -60,7 +59,7 @@ def orm_engine_fixture():
 def test_add_user(database_fixture : Database, orm_engine_fixture):
     session = sessionmaker(orm_engine_fixture)()
     cryptography = Cryptography()
-    users = Users(session, Cryptography())
+    users = Users(session, cryptography)
 
     credentials = Credentials(
         username="ericcar",
@@ -73,14 +72,45 @@ def test_add_user(database_fixture : Database, orm_engine_fixture):
         last_name="Cardozo",
         birthdate=date(1997, 9, 30)
     )
-                              
+
     users.add_user(credentials, profile)
+    session.commit()
+    session.close()
     
     connection = database_fixture.connection
     cursor = connection.cursor()
+    try:
+        cursor.execute('''
+            SELECT * FROM credentials WHERE username = 'ericcar';
+        ''')
 
-    cursor.close()
-    session.close()
+        credentials = cursor.fetchall()
+        assert credentials[0][0] == 1
+        assert credentials[0][1] == 'ericcar'
+        assert credentials[0][2] == 'eric.m.cardozo@gmail.com'
+
+        connection.commit()
+
+        cursor.execute('''
+            SELECT * FROM profiles WHERE first_name = 'Eric';
+        ''')
+
+        profile = cursor.fetchall()
+
+        assert profile[0][1] == 'Eric'
+        assert profile[0][2] == 'Cardozo'
+
+    except Exception as error:
+        raise AssertionError(f"Test failed: {error}")
+    
+    finally:
+        connection.commit()
+        cursor.close()
+        database_fixture.drop()
+        connection.close()
+        
+
+
 
 
 

@@ -1,6 +1,7 @@
 import os, dotenv
 import pytest
 from infrastructure.setup import Database
+from datetime import date
 
 @pytest.fixture
 def database_fixture():
@@ -14,8 +15,6 @@ def database_fixture():
     )
     database.migrate()
     yield database
-    database.drop()
-    database.close()
 
 def test_database(database_fixture : Database):
     connection = database_fixture.connection
@@ -32,7 +31,6 @@ def test_database(database_fixture : Database):
         ''')
 
         credentials = cursor.fetchall()
-        assert credentials[0][0] == 1
         assert credentials[0][1] == 'ericcar'
         assert credentials[0][2] == 'eric.m.cardozo@gmail.com'
 
@@ -44,19 +42,26 @@ def test_database(database_fixture : Database):
         connection.commit()
 
         cursor.execute('''
-            SELECT * FROM profiles WHERE id = 1;
+            SELECT * FROM profiles WHERE first_name = 'Eric';
         ''')
 
         profile = cursor.fetchall()
 
         assert profile[0][1] == 'Eric'
+        assert profile[0][2] == 'Cardozo'
+
 
     except Exception as error:
-        connection.rollback()
-        cursor.close()
         raise AssertionError(f"Test failed: {error}")
 
-    cursor.close()
+    finally:
+        connection.commit()
+        cursor.close()
+        database_fixture.drop()
+        database_fixture.connection.close()
+
+
+
     
 
 

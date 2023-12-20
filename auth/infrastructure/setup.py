@@ -18,7 +18,9 @@ class Database:
             self.connection = None
             print("Error while connecting to database", error)
 
-    def migrate(self, path : str = os.path.join(os.getcwd() , 'infrastructure/migrations')):
+    def migrate(self):
+        path = os.path.abspath("infrastructure/migrations") 
+        print(path)
         assert self.connection is not None, "Database connection is not established"
         cursor = self.connection.cursor()
         migrations = os.listdir(path)
@@ -43,10 +45,6 @@ class Database:
                 print(f"Error dropping table {table}: {error}")
         cursor.close()
 
-    def close(self):
-        self.connection.close()
-
-
 
 if __name__ == "__main__":
     test = Database(
@@ -57,6 +55,6 @@ if __name__ == "__main__":
         database = os.getenv("TEST_DATABASE_NAME")
     )
 
-    test.migrate('./infrastructure/migrations')
+    test.migrate()
     test.drop()
-    test.close()
+    test.connection.close()
