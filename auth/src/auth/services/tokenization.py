@@ -9,14 +9,10 @@ from typing import Union, Any, List
 dotenv.load_dotenv()
 
 class Tokenization(Service):
-    algorithm = 'HS256'
-    expiration_delta = timedelta(minutes = 15)
 
-    def __init__(self , algorithm : str = None, expiration_delta : timedelta = None):
-        if algorithm:
-            self.algorithm = algorithm
-        if expiration_delta:
-            self.expiration_delta = expiration_delta
+    def __init__(self , algorithm : str = 'HS256', expiration_delta : timedelta = timedelta(minutes = 15)):
+        self.algorithm = algorithm
+        self.expiration_delta = expiration_delta
 
     def encode(self, subject: Union[str, Any], expires_delta : timedelta = None) -> str:
         if expires_delta is None:

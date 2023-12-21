@@ -17,4 +17,4 @@ COPY /auth .
 
 RUN poetry install
 
-CMD ["poetry", "run", "pytest", "tests/"]
+CMD ["poetry", "run", "pytest", "--cov=src", "tests/unit"]

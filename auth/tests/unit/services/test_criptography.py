@@ -1,5 +1,5 @@
 import pytest
-from src.auth.criptography import Cryptography
+from src.auth.services.criptography import Cryptography
 
 @pytest.fixture
 def cryptography_fixture():

@@ -11,11 +11,11 @@ class Users(ABC, Generic[C,P]):
         pass
 
     @abstractmethod
-    def _create_credentials(self, username : str, email : str, password : str) -> int:    
+    def _create_credentials(self, **kwargs) -> int:    
         raise NotImplementedError
 
     @abstractmethod
-    def _create_profile(self, id : int, first_name : str, last_name : str, birthdate : date):
+    def _create_profile(self, **kwargs):
         raise NotImplementedError
     
     @abstractmethod
@@ -31,8 +31,18 @@ class Users(ABC, Generic[C,P]):
         raise NotImplementedError
     
     def add_user(self, credentials : Credentials, profile : Profile) -> int:
-        id = self._create_credentials(credentials.username, credentials.email, credentials.password.get_secret_value())
-        self._create_profile(id, profile.first_name, profile.last_name, profile.birthdate)
+        id = self._create_credentials(
+            username = credentials.username,
+            email = credentials.email,
+            password= credentials.password.get_secret_value() )
+        
+        
+        self._create_profile(
+            id = id,
+            first_name = profile.first_name,
+            last_name = profile.last_name,
+
+            birthdate = profile.birthdate )
         return id
     
     def get_user_by_username(self, username : str) -> User:

@@ -18,3 +18,9 @@ class Tokenization(ABC):
     @abstractmethod
     def decode(self, token : str) -> dict:
         raise NotImplementedError
+    
+    
+class Authentication(ABC):
+    @abstractmethod
+    def login(self, username : str, password : str) -> str:
+        raise NotImplementedError

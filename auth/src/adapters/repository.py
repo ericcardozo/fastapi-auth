@@ -10,14 +10,14 @@ class Users(Repository[Credentials, Profile]):
 
     #TODO: Change the parameters to **kwargs in creation.
         
-    def _create_credentials(self, username : str, email : str, password : str) -> int:
-        credentials = Credentials(username=username, email=email, password=password)
+    def _create_credentials(self, **kwargs) -> int:
+        credentials = Credentials(**kwargs)
         self._session.add(credentials)
         self._session.flush()
         return credentials.id
     
-    def _create_profile(self, id : int, first_name : str, last_name : str, birthdate : date):
-        profile = Profile(id=id, first_name=first_name, last_name=last_name, birthdate=birthdate)
+    def _create_profile(self, **kwargs):
+        profile = Profile(**kwargs)
         self._session.add(profile)
         self._session.flush()
 

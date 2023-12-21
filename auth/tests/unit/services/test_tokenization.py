@@ -1,4 +1,4 @@
-from src.auth.tokenization import Tokenization
+from src.auth.services.tokenization import Tokenization
 
 import pytest
 import time
