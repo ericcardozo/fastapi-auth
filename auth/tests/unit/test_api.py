@@ -5,8 +5,7 @@ from typing import AsyncIterator
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
 from fastapi.security import OAuth2PasswordRequestForm
-from src.auth.api import api
-from src.auth import __version__
+from src.auth.api import api, __version__
 
 @pytest.fixture
 def anyio_backend() -> str:
