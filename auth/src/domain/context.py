@@ -1,12 +1,11 @@
 from src.domain.repository import Users as Repository
-from src.domain.services import Cryptography, Tokenization, Authentication
+from src.domain.services import Cryptography, Tokenization
 from abc import ABC, abstractmethod
 
 class Context(ABC):
     users : Repository
     cryptography : Cryptography
     tokenization : Tokenization
-    authentication : Authentication
 
     def __exit__(self, *args):
         self.rollback()
