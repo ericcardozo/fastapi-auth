@@ -14,7 +14,7 @@ class Repository(ABC, Generic[T]):
         pass
 
     @abstractmethod
-    def update(self,*args, **kwargs) -> T:
+    def update(self, id : int, **kwargs) -> T:
         pass
 
     @abstractmethod
@@ -22,7 +22,7 @@ class Repository(ABC, Generic[T]):
         pass
     
 class Accounts(Repository[Account]):
-    
+
     @abstractmethod
     def verify(self, id : int, password : str) -> bool:
         pass

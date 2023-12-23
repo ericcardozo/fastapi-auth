@@ -11,6 +11,8 @@ class Cryptography:
     def verify(cls, password: str, hash: str) -> bool:
         return cls.context.verify(password, hash)
 
+
+
 from jose import jwt, JWTError, ExpiredSignatureError
 from jose import jwt, ExpiredSignatureError, JWTError
 from datetime import datetime, timedelta

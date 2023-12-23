@@ -12,7 +12,7 @@ def test_cryptography():
 def test_tokenization():
     context = Context()
     with context:
-        token = context.tokenization.encode(4)
+        token = context.tokenization.encode('4')
 
     other_context = Context()
     with other_context:

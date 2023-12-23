@@ -35,7 +35,7 @@ class Database:
                 print(f"Migration {migration} executed successfully")
         cursor.close()
 
-    def drop(self, tables : List[str] = ["credentials", "profiles"]):
+    def drop(self, tables : List[str] = ["accounts", "profiles"]):
         assert self.connection is not None, "Database connection is not established"
         cursor = self.connection.cursor()
         for table in tables:

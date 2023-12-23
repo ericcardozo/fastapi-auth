@@ -4,5 +4,5 @@ CREATE TABLE IF NOT EXISTS profiles(
     last_name VARCHAR(50) NOT NULL,
     birthdate DATE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (id) REFERENCES credentials(id)
+    FOREIGN KEY (id) REFERENCES accounts(id)
 );
