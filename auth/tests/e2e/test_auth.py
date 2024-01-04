@@ -32,3 +32,12 @@ async def test_login(client : httpx.AsyncClient) -> None:
     }
     response = await client.post('/auth/login', data=form_data)
     assert response.status_code == 200
+
+@pytest.mark.asyncio
+async def test_register(client : httpx.AsyncClient) -> None:
+    form_data = {
+        'username' : 'patroclio',
+        'password' : 'patroclio_capo_total'
+    }
+    response = await client.post('/auth/register', data=form_data)
+    assert response.status_code == 200
