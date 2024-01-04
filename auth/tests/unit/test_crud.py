@@ -1,43 +1,62 @@
-from tests.unit.mock.context import FakeContext
-from tests.unit.mock.repository import FakeAccounts
-
 import pytest
 
+from auth.domain.models import Credentials
+from tests.unit.mock.context import Users
+
 def test_create():
-    context = FakeContext()
-    with context:
-        account = context.accounts.create("test", "test")
+    users = Users()
+    with users:
+        credentials = Credentials(username="test", password="test")
+        account = users.accounts.create(credentials)
         assert account.id == 3
         assert account.username == "test"
-        assert context.commited == False
-        context.commit()
+        assert users.commited == False
+        users.commit()
 
-    assert context.commited == True
+    assert users.commited == True
 
 def test_read():
-    context = FakeContext()
-    with context:
-        account = context.accounts.read(username="admin")
+    users = Users()
+    with users:
+        account = users.accounts.read(id=1)
         assert account.id == 1
         assert account.username == "admin"
+        assert users.commited == False
+        users.commit()
+
+    assert users.commited == True
 
 def test_update():
-    context = FakeContext()
-    with context:
-        account = context.accounts.update(1, username="test")
+    users = Users()
+    with users:
+        account = users.accounts.update(id=1, username="test")
         assert account.id == 1
         assert account.username == "test"
-        assert context.commited == False
-        context.commit()
+        assert users.commited == False
+        users.commit()
 
-    assert context.commited == True
+    assert users.commited == True
 
 def test_delete():
-    context = FakeContext()
-    with context:
-        context.accounts.delete(username="admin")
-        assert context.accounts.read(username="admin") == None
-        assert context.commited == False
-        context.commit()
+    users = Users()
+    with users:
+        users.accounts.delete(id=1)
+        assert users.accounts.read(id=1) == None
+        assert users.commited == False
+        users.commit()
 
-    assert context.commited == True
+    assert users.commited == True
+
+
+def test_verify():
+    users = Users()
+    with users:
+        credentials = Credentials(username="admin", password="admin")
+        assert users.accounts.verify(credentials) == True
+        credentials = Credentials(username="admin", password="test")
+        assert users.accounts.verify(credentials) == False
+        assert users.commited == False
+        users.commit()
+
+    assert users.commited == True
+    

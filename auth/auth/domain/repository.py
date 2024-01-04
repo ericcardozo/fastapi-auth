@@ -1,28 +1,25 @@
 from abc import ABC, abstractmethod
-from typing import TypeVar, Generic, overload
 from auth.domain.aggregates import Account
-
-T = TypeVar('T')
-class Repository(ABC, Generic[T]):
+from auth.domain.models import Credentials
+    
+class Accounts(ABC):
 
     @abstractmethod
-    def create(self,*args,**kwargs) -> T:
+    def create(self, credentials : Credentials) -> Account:
         pass
     
     @abstractmethod
-    def read(self, **kwargs) -> T:
+    def read(self, **kwargs) -> Account:
         pass
 
     @abstractmethod
-    def update(self, id : int, **kwargs) -> T:
+    def update(self, id : int, **kwargs) -> Account:
         pass
 
     @abstractmethod
     def delete(self, **kwargs) -> None:
         pass
-    
-class Accounts(Repository[Account]):
 
     @abstractmethod
-    def verify(self, id : int, password : str) -> bool:
+    def verify(self, credentials : Credentials) -> bool:
         pass

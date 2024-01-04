@@ -3,7 +3,7 @@ from sqlalchemy.orm import declarative_base
 
 Base = declarative_base()
 
-class AccountSchema(Base):
+class Account(Base):
     __tablename__ = "accounts"
 
     id = Column(Integer, primary_key = True)
@@ -14,4 +14,3 @@ class AccountSchema(Base):
 
     def __repr__(self):
         return f"<User(user_id={self.id}, username={self.username})>"
-    

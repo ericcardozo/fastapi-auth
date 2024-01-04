@@ -1,20 +1,21 @@
-from tests.unit.mock.context import FakeContext as Context
+from tests.unit.mock.context import Users
 
 def test_cryptography():
-    context = Context()
+    context = Users()
+
     with context:
         hash = context.cryptography.hash("password")
 
-    other_context = Context()
+    other_context = Users()
     with other_context:
         assert other_context.cryptography.verify("password", hash)
 
 def test_tokenization():
-    context = Context()
+    context = Users()
     with context:
         token = context.tokenization.encode('4')
 
-    other_context = Context()
+    other_context = Users()
     with other_context:
         assert other_context.tokenization.decode(token)["subject"] == '4'
 

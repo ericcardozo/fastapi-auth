@@ -1,11 +1,13 @@
 from abc import ABC, abstractmethod
 from auth.domain.repository import Accounts
-from auth.domain.services import Cryptography, Tokenization
+from auth.domain.services.cryptography import Cryptography
+from auth.domain.services.tokenization import Tokenization
 
-class Context(ABC):
+class Users(ABC):
     accounts : Accounts
-    cryptography = Cryptography()
-    tokenization = Tokenization()   
+
+    cryptography = Cryptography
+    tokenization = Tokenization
 
     def __exit__(self, *args):
         self.rollback()

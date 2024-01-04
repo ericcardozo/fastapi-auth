@@ -1,57 +1,59 @@
-from auth.domain.repository import Accounts
+from auth.domain.repository import Accounts as Repository
 from auth.domain.aggregates import Account
-from auth.domain.services import Cryptography
+from auth.domain.models import Credentials
+from auth.domain.services.cryptography import Cryptography
 
-class FakeAccounts(Accounts):
-    
+class Schema:
+    def __init__(self, id : int, username : str, password : str):
+        self.id = id
+        self.username = username
+        self.password = password
+
+class Accounts(Repository):
     def __init__(self):
         self.accounts = set([
-            Account(1, "admin"),
-            Account(2, "user")])
-        
-        self.passwords = {
-            1 : Cryptography.hash("admin"),
-            2 : Cryptography.hash("user")
-        }
-        
-        self.index = 3
+            Schema(1, "admin", Cryptography.hash("admin")),
+            Schema(2, "user", Cryptography.hash("user"))
+        ])
 
-    def create(self, username : str, password : str) -> Account:
-        account = Account(self.index, username)
+        self.index = 3 
+
+    def create(self, credentials : Credentials) -> Account:
+        schema = Schema(self.index, credentials.username, credentials.password.get_secret_value())
+        self.accounts.add(schema)
         self.index += 1
-        self.accounts.add(account)
-        return account
+        return Account(schema.id, schema.username)
     
-    def read(self, **kwargs) -> Account:
-        key, value = next(iter(kwargs.items()))
-        if key == 'username':
-            return next((account for account in self.accounts if account.username == value), None)
-        elif key == 'id':
-            return next((account for account in self.accounts if account.id == value), None)
-        else:
-            return None
-        
-    def update(self, id : int, **kwargs) -> Account:
-        account = next((account for account in self.accounts if account.id == id), None)
-        if account:
-            for key, value in kwargs.items():
-                if key == 'username':
-                    account.username = value
-        return account
+    def read(self, **kwargs)-> Account:
+        if kwargs.get("id"):
+            for account in self.accounts:
+                if account.id == kwargs.get("id"):
+                    return Account(account.id, account.username)
+        elif kwargs.get("username"):
+            for account in self.accounts:
+                if account.username == kwargs.get("username"):
+                    return Account(account.id, account.username)
+        return None
 
-    def delete(self, **kwargs) -> None:
-        key, value = next(iter(kwargs.items()))
-        if key == 'username':
-            account = next((account for account in self.accounts if account.username == value), None)
-            if account:
-                self.accounts.remove(account)
-        elif key == 'id':
-            account = next((account for account in self.accounts if account.id == value), None)
-            if account:
-                self.accounts.remove(account)
-        else:
-            return None
-        
-    def verify(self, id : int, password : str) -> bool:
-        return Cryptography.verify(password, self.passwords[id])
-        
+    def update(self, id : int, **kwargs) -> Account:
+        for account in self.accounts:
+            if account.id == id:
+                if kwargs.get("username"):
+                    account.username = kwargs.get("username")
+                if kwargs.get("password"):
+                    account.password = kwargs.get("password")
+                return Account(account.id, account.username)
+
+    def delete(self, id : int, **kwargs):
+        for account in self.accounts:
+            if account.id == id:
+                schema = account
+                
+        self.accounts.remove(schema)
+                
+    def verify(self, credentials: Credentials) -> bool:
+        for account in self.accounts:
+            if account.username == credentials.username:
+                return Cryptography.verify(credentials.password.get_secret_value(), account.password)
+        return False
+    

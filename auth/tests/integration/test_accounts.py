@@ -1,4 +1,5 @@
-from auth.adapters.context import Context
+from auth.adapters.context import Users
+from auth.domain.models import Credentials
 
 import pytest
 import psycopg2
@@ -26,7 +27,7 @@ def session_factory_fixture():
 
 @pytest.fixture
 def context_fixture(session_factory_fixture):
-    context = Context(session_factory_fixture)
+    context = Users(session_factory_fixture)
     return context
 
 @pytest.fixture
@@ -43,11 +44,10 @@ def database_connection_fixture():
 def test_create_account(context_fixture, database_connection_fixture):
     context = context_fixture
 
+    credentials = Credentials(username = "ericcar", password = "123456")
+
     with context:
-        context.accounts.create(
-            username = "ericcar",
-            password = context.cryptography.hash("123456")
-        )
+        context.accounts.create(credentials)
         context.commit()
 
     try:

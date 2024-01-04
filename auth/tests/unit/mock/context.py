@@ -1,12 +1,12 @@
-from auth.domain.context import Context
-from tests.unit.mock.repository import FakeAccounts
+from auth.domain.context import Users as Context
+from tests.unit.mock.repository import Accounts
 
-class FakeContext(Context):
+class Users(Context):
     def __init__(self):
         self.commited = False
 
     def __enter__(self):
-        self.accounts = FakeAccounts()
+        self.accounts = Accounts()
         return self
 
     def commit(self):
@@ -15,4 +15,3 @@ class FakeContext(Context):
     
     def rollback(self):
         pass
-    
