@@ -13,4 +13,6 @@ def handle_register(credentials : Credentials, users : Users) -> Token:
         account = users.accounts.read(username = credentials.username)
         assert account == None, "Account already exists"
         account = users.accounts.create(credentials)
+        users.commit()
         return users.tokenization.encode(account.id)
+    

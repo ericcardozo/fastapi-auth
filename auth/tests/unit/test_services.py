@@ -18,5 +18,3 @@ def test_tokenization():
     other_context = Users()
     with other_context:
         assert other_context.tokenization.decode(token)["subject"] == '4'
-
-

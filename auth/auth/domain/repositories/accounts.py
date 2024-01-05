@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+
 from auth.domain.aggregates import Account
 from auth.domain.models import Credentials
     

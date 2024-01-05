@@ -1,4 +1,4 @@
-from auth.domain.repository import Accounts as Repository
+from auth.domain.repositories.accounts import Accounts as Repository
 from auth.domain.aggregates import Account
 from auth.domain.models import Credentials
 from auth.domain.services.cryptography import Cryptography

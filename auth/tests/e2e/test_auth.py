@@ -2,10 +2,6 @@ import httpx
 import pytest, pytest_asyncio
 from typing import AsyncIterator
 
-from fastapi import FastAPI
-from fastapi.security import OAuth2PasswordRequestForm
-from fastapi.testclient import TestClient
-
 from auth import __version__
 from auth.app.api import main
 
@@ -39,5 +35,5 @@ async def test_register(client : httpx.AsyncClient) -> None:
         'username' : 'patroclio',
         'password' : 'patroclio_capo_total'
     }
-    response = await client.post('/auth/register', data=form_data)
+    response = await client.post('/auth/register', data = form_data)
     assert response.status_code == 200
