@@ -1,28 +1,20 @@
-# The builder image, used to build the virtual environment
-FROM python:3.10-buster as builder
+FROM python:3.10
 
-RUN pip install poetry==1.7.1
+ENV POETRY_VERSION=1.7.1
+ENV POETRY_HOME=/opt/poetry
+ENV POETRY_VENV=/opt/poetry-venv
+ENV POETRY_CACHE_DIR=/opt/.cache
 
-ENV POETRY_NO_INTERACTION=1 \
-    POETRY_VIRTUALENVS_IN_PROJECT=1 \
-    POETRY_VIRTUALENVS_CREATE=1 \
-    POETRY_CACHE_DIR=/tmp/poetry_cache
+RUN python3 -m venv $POETRY_VENV \
+    && $POETRY_VENV/bin/pip install -U pip setuptools \
+    && $POETRY_VENV/bin/pip install poetry==${POETRY_VERSION}
 
-WORKDIR /auth
-
-COPY auth/pyproject.toml auth/poetry.lock ./auth/
-
-RUN touch README.md
-
-RUN poetry install --without dev --no-root && rm -rf $POETRY_CACHE_DIR
-
-FROM python:3.10-slim-buster as runtime
-
-ENV VIRTUAL_ENV=/app/.venv \
-    PATH="/auth/.venv/bin:$PATH"
-
-COPY --from=builder ${VIRTUAL_ENV} ${VIRTUAL_ENV}
+ENV PATH="${PATH}:${POETRY_VENV}/bin"
 
 WORKDIR /auth
 
-ENTRYPOINT ["pytest"]
+COPY /auth .
+
+RUN poetry install
+
+CMD ["poetry", "run", "pytest", "--cov=src", "tests/unit"]

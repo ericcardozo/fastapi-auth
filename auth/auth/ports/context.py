@@ -1,17 +1,16 @@
-from src.domain.repository import Users
-from src.domain.services import Cryptography
 from abc import ABC, abstractmethod
 
-class Context(ABC):
-    users : Users
-    cryptography : Cryptography
+from auth.ports.repository import Accounts
+from auth.domain.services import Cryptography, Tokenization
+
+class Users(ABC):
+    accounts : Accounts
+
+    cryptography = Cryptography
+    tokenization = Tokenization
 
     def __exit__(self, *args):
         self.rollback()
-
-    @abstractmethod
-    def __enter__(self):
-        raise NotImplementedError
 
     @abstractmethod
     def commit(self):

@@ -1,16 +1,16 @@
-from src.domain.context import Context as Provider
-from src.domain.services import Cryptography
-from src.adapters.repository import Users
 from sqlalchemy.orm import sessionmaker, Session
 
-class Context(Provider):
+from auth.ports.context import Users as Context
+from auth.adapters.repository import Accounts
+
+class Users(Context):
     def __init__(self, session_factory : sessionmaker):
         self.session_factory = session_factory 
         self.session : Session
 
     def __enter__(self):
         self.session = self.session_factory()
-        self.users = Users(self.session)  
+        self.accounts = Accounts(self.session)  
         return self
 
     def __exit__(self, *args):

@@ -22,7 +22,7 @@ class Database:
             print("Error while connecting to database", error)
 
     def migrate(self):
-        path = os.path.abspath("infrastructure/migrations") 
+        path = '../infrastructure/migrations'
         print(path)
         assert self.connection is not None, "Database connection is not established"
         cursor = self.connection.cursor()
@@ -35,7 +35,7 @@ class Database:
                 print(f"Migration {migration} executed successfully")
         cursor.close()
 
-    def drop(self, tables : List[str] = ["credentials", "profiles"]):
+    def drop(self, tables : List[str] = ["accounts", "profiles"]):
         assert self.connection is not None, "Database connection is not established"
         cursor = self.connection.cursor()
         for table in tables:
@@ -60,5 +60,6 @@ if __name__ == "__main__":
         database = os.getenv("TEST_DATABASE_NAME")
     )
 
+    test.drop()
     test.migrate()
     test.connection.close()
