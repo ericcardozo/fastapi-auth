@@ -1,9 +1,9 @@
 from sqlalchemy.orm import Session
 
-from auth.domain.repositories.accounts import Accounts as Repository
+from auth.ports.repository import Accounts as Repository
 from auth.domain.aggregates import Account
 from auth.domain.models import Credentials
-from auth.domain.services.cryptography import Cryptography
+from auth.domain.services import Cryptography
 from auth.adapters.schemas import Account as Schema
 
 class Accounts(Repository):

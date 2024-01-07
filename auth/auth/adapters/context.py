@@ -1,7 +1,7 @@
-from auth.domain.context import Users as Context
-from auth.adapters.repositories.accounts import Accounts
-
 from sqlalchemy.orm import sessionmaker, Session
+
+from auth.ports.context import Users as Context
+from auth.adapters.repository import Accounts
 
 class Users(Context):
     def __init__(self, session_factory : sessionmaker):

@@ -1,4 +1,4 @@
-from auth.domain.context import Users as Context
+from auth.ports.context import Users as Context
 from tests.unit.mock.repository import Accounts
 
 class Users(Context):

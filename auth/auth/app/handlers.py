@@ -1,5 +1,5 @@
 from auth.domain.models import Credentials, Token
-from auth.domain.context import Users
+from auth.ports.context import Users
 
 def handle_login(credentials : Credentials, users : Users) -> Token:
     with users:
@@ -15,4 +15,3 @@ def handle_register(credentials : Credentials, users : Users) -> Token:
         account = users.accounts.create(credentials)
         users.commit()
         return users.tokenization.encode(account.id)
-    

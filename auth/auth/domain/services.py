@@ -1,13 +1,23 @@
 import os, dotenv
-from typing import Union, Any, List
-
+from typing import Union, Any
+from passlib.context import CryptContext
 from jose import jwt, JWTError, ExpiredSignatureError
 from jose import jwt, ExpiredSignatureError, JWTError
 from datetime import datetime, timedelta
 
-dotenv.load_dotenv()
+class Cryptography:
+    context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+
+    @classmethod
+    def hash(cls, password: str) -> str:
+        return cls.context.hash(password)
+    
+    @classmethod
+    def verify(cls, password: str, hash: str) -> bool:
+        return cls.context.verify(password, hash)
 
 class Tokenization:
+    dotenv.load_dotenv()
     algorithm = 'HS256'
     expiration_delta = timedelta(minutes = 15)
 

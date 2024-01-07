@@ -1,8 +1,7 @@
 from abc import ABC, abstractmethod
 
-from auth.domain.repositories.accounts import Accounts
-from auth.domain.services.cryptography import Cryptography
-from auth.domain.services.tokenization import Tokenization
+from auth.ports.repository import Accounts
+from auth.domain.services import Cryptography, Tokenization
 
 class Users(ABC):
     accounts : Accounts
